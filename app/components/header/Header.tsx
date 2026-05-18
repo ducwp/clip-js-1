@@ -10,7 +10,7 @@ export default function Header() {
     }
 
     return (
-        <header className="bg-black border-b border-gray-800 shadow-sm">
+        <header className="bg-black border-b border-gray-800 shadow-xs">
             <div className="container mx-auto px-4 py-4 flex justify-between items-center">
                 <div className="flex items-center">
                     <Link href="/" className="text-3xl dark:text-gray-100">ClipJS</Link>

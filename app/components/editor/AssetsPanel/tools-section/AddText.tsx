@@ -86,7 +86,7 @@ export default function AddTextButton() {
                                 <textarea
                                     value={textConfig.text}
                                     onChange={(e) => setTextConfig({ ...textConfig, text: e.target.value })}
-                                    className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                    className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                                 />
                             </div>
 
@@ -98,7 +98,7 @@ export default function AddTextButton() {
                                         type="number"
                                         value={textConfig.positionStart}
                                         onChange={(e) => setTextConfig({ ...textConfig, positionStart: Number(e.target.value) })}
-                                        className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                        className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                                         min={0}
                                     />
                                 </div>
@@ -108,7 +108,7 @@ export default function AddTextButton() {
                                         type="number"
                                         value={textConfig.positionEnd}
                                         onChange={(e) => setTextConfig({ ...textConfig, positionEnd: Number(e.target.value) })}
-                                        className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                        className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                                         min={0}
                                     />
                                 </div>
@@ -122,7 +122,7 @@ export default function AddTextButton() {
                                         type="number"
                                         value={textConfig.x}
                                         onChange={(e) => setTextConfig({ ...textConfig, x: Number(e.target.value) })}
-                                        className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                        className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                                     />
                                 </div>
                                 <div>
@@ -131,7 +131,7 @@ export default function AddTextButton() {
                                         type="number"
                                         value={textConfig.y}
                                         onChange={(e) => setTextConfig({ ...textConfig, y: Number(e.target.value) })}
-                                        className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                        className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                                     />
                                 </div>
                             </div>
@@ -144,7 +144,7 @@ export default function AddTextButton() {
                                         type="number"
                                         value={textConfig.fontSize}
                                         onChange={(e) => setTextConfig({ ...textConfig, fontSize: Number(e.target.value) })}
-                                        className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                        className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                                         min={0}
                                     />
                                 </div>
@@ -155,7 +155,7 @@ export default function AddTextButton() {
                                         type="number"
                                         value={textConfig.zIndex}
                                         onChange={(e) => setTextConfig({ ...textConfig, zIndex: Number(e.target.value) })}
-                                        className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                        className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                                         min={0}
                                     />
                                 </div>
@@ -168,7 +168,7 @@ export default function AddTextButton() {
                                     <select
                                         value={textConfig.font}
                                         onChange={(e) => setTextConfig({ ...textConfig, font: e.target.value })}
-                                        className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                        className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                                     >
                                         <option value="Arial">Arial</option>
                                         <option value="Inter">Inter</option>
@@ -185,7 +185,7 @@ export default function AddTextButton() {
                                         type="color"
                                         value={textConfig.color}
                                         onChange={(e) => setTextConfig({ ...textConfig, color: e.target.value })}
-                                        className="mt-1 block w-full bg-darkSurfacePrimary rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                        className="mt-1 block w-full bg-darkSurfacePrimary rounded-md border-gray-300 shadow-xs focus:border-blue-500 focus:ring-blue-500"
                                     />
                                 </div>
                                 <div className="mt-2 flex justify-end space-x-3">

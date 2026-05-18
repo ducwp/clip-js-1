@@ -112,7 +112,7 @@ export default function AudioTimeline() {
                             {/* <MoveableTimeline /> */}
                             <Image
                                 alt="Audio"
-                                className="h-7 w-7 min-w-6 mr-2 flex-shrink-0"
+                                className="h-7 w-7 min-w-6 mr-2 shrink-0"
                                 height={30}
                                 width={30}
                                 src="https://www.svgrepo.com/show/532708/music.svg"

@@ -4,6 +4,7 @@ import { useAppSelector } from '../../../store';
 import { setActiveElement, setMediaFiles, setTextElements } from '../../../store/slices/projectSlice';
 import { MediaFile } from '../../../types';
 import { useAppDispatch } from '../../../store';
+import { Button } from '@/components/ui/button';
 
 export default function MediaProperties() {
     const { mediaFiles, activeElementIndex } = useAppSelector((state) => state.projectState);
@@ -19,10 +20,11 @@ export default function MediaProperties() {
 
     return (
         <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 gap-8">
                 {/* Source Video */}
                 <div className="space-y-2">
                     <h4 className="font-semibold">Source Video</h4>
+                    <Button>Test Button</Button>
                     <div className="flex items-center space-x-4">
                         <div>
                             <label className="block text-sm">Start (s)</label>
@@ -35,7 +37,7 @@ export default function MediaProperties() {
                                     startTime: Number(e.target.value),
                                     endTime: mediaFile.endTime
                                 })}
-                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                             />
                         </div>
                         <div>
@@ -49,7 +51,7 @@ export default function MediaProperties() {
                                     startTime: mediaFile.startTime,
                                     endTime: Number(e.target.value)
                                 })}
-                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                             />
                         </div>
                     </div>
@@ -69,7 +71,7 @@ export default function MediaProperties() {
                                     positionStart: Number(e.target.value),
                                     positionEnd: Number(e.target.value) + (mediaFile.positionEnd - mediaFile.positionStart)
                                 })}
-                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                             />
                         </div>
                         <div>
@@ -82,7 +84,7 @@ export default function MediaProperties() {
                                 onChange={(e) => onUpdateMedia(mediaFile.id, {
                                     positionEnd: Number(e.target.value)
                                 })}
-                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                             />
                         </div>
                     </div>
@@ -98,7 +100,7 @@ export default function MediaProperties() {
                                 step="10"
                                 value={mediaFile.x || 0}
                                 onChange={(e) => onUpdateMedia(mediaFile.id, { x: Number(e.target.value) })}
-                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                             />
                         </div>
                         <div>
@@ -108,7 +110,7 @@ export default function MediaProperties() {
                                 step="10"
                                 value={mediaFile.y || 0}
                                 onChange={(e) => onUpdateMedia(mediaFile.id, { y: Number(e.target.value) })}
-                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                             />
                         </div>
                         <div>
@@ -118,7 +120,7 @@ export default function MediaProperties() {
                                 step="10"
                                 value={mediaFile.width || 100}
                                 onChange={(e) => onUpdateMedia(mediaFile.id, { width: Number(e.target.value) })}
-                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                             />
                         </div>
                         <div>
@@ -128,7 +130,7 @@ export default function MediaProperties() {
                                 step="10"
                                 value={mediaFile.height || 100}
                                 onChange={(e) => onUpdateMedia(mediaFile.id, { height: Number(e.target.value) })}
-                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                             />
                         </div>
                         <div>
@@ -137,7 +139,7 @@ export default function MediaProperties() {
                                 type="number"
                                 value={mediaFile.zIndex || 0}
                                 onChange={(e) => onUpdateMedia(mediaFile.id, { zIndex: Number(e.target.value) })}
-                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                             />
                         </div>
                         <div>
@@ -148,7 +150,7 @@ export default function MediaProperties() {
                                 max="100"
                                 value={mediaFile.opacity}
                                 onChange={(e) => onUpdateMedia(mediaFile.id, { opacity: Number(e.target.value) })}
-                                className="w-full bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:border-white-500"
+                                className="w-full bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:border-white-500"
                             />
                         </div>
                     </div>
@@ -166,7 +168,7 @@ export default function MediaProperties() {
                                 step="1"
                                 value={mediaFile.volume}
                                 onChange={(e) => onUpdateMedia(mediaFile.id, { volume: Number(e.target.value) })}
-                                className="w-full bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:border-white-500"
+                                className="w-full bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:border-white-500"
                             />
                         </div>
                         {/* TODO: Add playback speed */}
@@ -179,7 +181,7 @@ export default function MediaProperties() {
                                 step="0.1"
                                 value={mediaFile.playbackSpeed || 1}
                                 onChange={(e) => onUpdateMedia(mediaFile.id, { playbackSpeed: Number(e.target.value) })}
-                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                             />
                         </div> */}
                     </div>

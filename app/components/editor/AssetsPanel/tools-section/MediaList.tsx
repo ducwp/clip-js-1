@@ -68,7 +68,7 @@ export default function MediaList() {
                                 </div>
                                 <button
                                     onClick={() => onDeleteMedia(mediaFile.id)}
-                                    className="text-red-500 hover:text-red-700 flex-shrink-0 ml-2"
+                                    className="text-red-500 hover:text-red-700 shrink-0 ml-2"
                                     aria-label="Delete file"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">

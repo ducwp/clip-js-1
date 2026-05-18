@@ -282,7 +282,7 @@ export const Timeline = () => {
                         step="1"
                         value={timelineZoom}
                         onChange={(e) => throttledZoom(Number(e.target.value))}
-                        className="w-[100px] bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:border-white-500"
+                        className="w-[100px] bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:border-white-500"
                     />
                     <span className="text-white text-lg">+</span>
                 </div>

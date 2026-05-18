@@ -1,11 +1,14 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter, Roboto_Mono } from "next/font/google";
+import { Inter, Roboto_Mono, Geist } from "next/font/google";
 import { Providers } from './providers'
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 import { Toaster } from 'react-hot-toast';
 import { Analytics } from "@vercel/analytics/next"
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const geistSans = Inter({
   variable: "--font-geist-sans",
@@ -28,13 +31,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={cn("font-sans", geist.variable)}>
       <body
         className={`min-h-screen flex flex-col bg-darkSurfacePrimary text-text-primary dark:bg-darkSurfacePrimary dark:text-dark-text-primary font-sans ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
           <Header />
-          <main className="flex-grow">
+          <main className="grow">
             <Toaster
               toastOptions={{
                 style: {

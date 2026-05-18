@@ -18,7 +18,7 @@ export default function RenderOptions() {
                                 <select
                                     value={exportSettings.resolution}
                                     onChange={(e) => dispatch(setResolution(e.target.value))}
-                                    className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                    className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                                 >
                                     <option value="480p">480p</option>
                                     <option value="720p">720p</option>
@@ -34,7 +34,7 @@ export default function RenderOptions() {
                                 <select
                                     value={exportSettings.quality}
                                     onChange={(e) => dispatch(setQuality(e.target.value))}
-                                    className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                    className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                                 >
                                     <option value="low">Low (Fastest)</option>
                                     <option value="medium">Medium</option>
@@ -49,7 +49,7 @@ export default function RenderOptions() {
                                 <select
                                     value={exportSettings.speed}
                                     onChange={(e) => dispatch(setSpeed(e.target.value))}
-                                    className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                    className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                                 >
                                     <option value="fastest">Fastest</option>
                                     <option value="fast">Fast</option>

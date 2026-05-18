@@ -70,7 +70,7 @@ export default function Home() {
           {featuresGridList.items.map(({ id, title, description, icon }) => (
             <article
               key={id}
-              className="flex flex-col gap-3 md:gap-4 rounded-lg border border-white border-opacity-10 shadow-md p-3 md:p-4 [box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset] dark:[box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset]"
+              className="flex flex-col gap-3 md:gap-4 rounded-lg border border-white border-opacity-10 shadow-md p-3 md:p-4 [box-shadow:70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset] dark:[box-shadow:70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset]"
             >
               <figure className="flex size-8 md:size-9 items-center justify-start rounded-full bg-surface-secondary p-2 dark:border-dark-border dark:bg-dark-surface-secondary">
                 <Image

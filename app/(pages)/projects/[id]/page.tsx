@@ -135,7 +135,7 @@ export default function Project({ params }: { params: Promise<{ id: string }> })
                 </div>
 
                 {/* Center - Video Preview */}
-                <div className="flex items-center justify-center flex-col flex-[1] overflow-hidden">
+                <div className="flex items-center justify-center flex-col flex-1 overflow-hidden">
                     <ProjectName />
                     <PreviewPlayer />
                 </div>

@@ -111,7 +111,7 @@ export default function Projects() {
                             {/* Add Project Button */}
                             <button onClick={() => setIsCreating(true)} className="group">
                                 <div
-                                    className="flex flex-col gap-4 rounded-lg border border-white border-opacity-10 shadow-md p-4 transition-transform transform group-hover:scale-105 group-hover:border-opacity-10 group-hover:shadow-lg [box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset] dark:[box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset]"
+                                    className="flex flex-col gap-4 rounded-lg border border-white border-opacity-10 shadow-md p-4 transition-transform transform group-hover:scale-105 group-hover:border-opacity-10 group-hover:shadow-lg [box-shadow:70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset] dark:[box-shadow:70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset]"
                                 >
                                     <figure className="flex items-center justify-between w-full rounded-full bg-surface-secondary p-2 dark:border-dark-border dark:bg-dark-surface-secondary">
                                         <div className="flex items-center space-x-4">
@@ -137,12 +137,12 @@ export default function Projects() {
                                     <div key={id} className="">
                                         <Link href={`/projects/${id}`} onClick={() => dispatch(setCurrentProject(id))} className="group block h-full">
                                             <div
-                                                className="flex flex-col gap-4 rounded-lg border border-white border-opacity-10 shadow-md p-4 transition-transform transform group-hover:scale-105 group-hover:border-opacity-10 group-hover:shadow-lg [box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset] dark:[box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset]"
+                                                className="flex flex-col gap-4 rounded-lg border border-white border-opacity-10 shadow-md p-4 transition-transform transform group-hover:scale-105 group-hover:border-opacity-10 group-hover:shadow-lg [box-shadow:70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset] dark:[box-shadow:70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset]"
                                             >
                                                 <figure className="flex items-center justify-between w-full rounded-full bg-surface-secondary p-2 dark:border-dark-border dark:bg-dark-surface-secondary">
                                                     {/*  Project Name */}
                                                     <div className="flex items-center space-x-3 flex-1 min-w-0">
-                                                        <div className="flex-shrink-0 flex size-9 items-center justify-center rounded-full bg-surface-secondary">
+                                                        <div className="shrink-0 flex size-9 items-center justify-center rounded-full bg-surface-secondary">
                                                             <Image
                                                                 alt={projectName}
                                                                 className="invert"
@@ -162,7 +162,7 @@ export default function Projects() {
                                                             e.preventDefault();
                                                             handleDeleteProject(id);
                                                         }}
-                                                        className="flex-shrink-0 ml-2 text-red-500 hover:text-red-600 transition-colors"
+                                                        className="shrink-0 ml-2 text-red-500 hover:text-red-600 transition-colors"
                                                         aria-label="Delete project"
                                                     >
                                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
@@ -206,7 +206,7 @@ export default function Projects() {
                                     }
                                 }}
                                 placeholder="Project Name"
-                                className="w-full p-2 mb-4 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                className="w-full p-2 mb-4 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
                             />
                             <div className="flex justify-end gap-2">
                                 <button

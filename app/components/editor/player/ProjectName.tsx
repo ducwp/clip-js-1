@@ -47,7 +47,7 @@ export default function ProjectName() {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     onKeyDown={handleKeyDown}
-                    className="text-2xl font-bold mt-4 capitalize tracking-wider bg-black w-full px-2 py-1 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="text-2xl font-bold mt-4 capitalize tracking-wider bg-black w-full px-2 py-1 rounded focus:outline-hidden focus:ring-2 focus:ring-blue-500"
                     autoFocus
                 />
             ) : (

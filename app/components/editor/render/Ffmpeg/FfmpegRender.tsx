@@ -257,7 +257,7 @@ export default function FfmpegRender({ loadFunction, loadFfmpeg, ffmpeg, logMess
 
             {/* Render Modal */}
             {showModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-9999">
                     <div className="bg-black rounded-xl shadow-lg p-6 max-w-xl w-full">
                         {/* Title and close button */}
                         <div className="flex justify-between items-center mb-4">
