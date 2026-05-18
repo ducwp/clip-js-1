@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from "next/image";
 import Link from "next/link";
-import { useAppDispatch, useAppSelector } from '../../store';
-import { addProject, deleteProject, rehydrateProjects, setCurrentProject } from '../../store/slices/projectsSlice';
-import { listProjects, storeProject, deleteProject as deleteProjectFromDB } from '../../store';
-import { ProjectState } from '../../types';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { addProject, deleteProject, rehydrateProjects, setCurrentProject } from '@/store/slices/projectsSlice';
+import { listProjects, storeProject, deleteProject as deleteProjectFromDB } from '@/store';
+import { ProjectState } from '@/types';
 import { toast } from 'react-hot-toast';
 export default function Projects() {
     const dispatch = useAppDispatch();

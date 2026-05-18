@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { featuresGridList } from "./utils/data";
+import { featuresGridList } from "@/utils/data";
 
 export default function Home() {
 

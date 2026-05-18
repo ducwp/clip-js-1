@@ -1,27 +1,28 @@
 "use client";
 import { useEffect, useRef, useState, use } from "react";
-import { getFile, storeProject, useAppDispatch, useAppSelector } from "../../../store";
-import { getProject } from "../../../store";
-import { setCurrentProject, updateProject } from "../../../store/slices/projectsSlice";
-import { rehydrate, setMediaFiles } from '../../../store/slices/projectSlice';
-import { setActiveSection } from "../../../store/slices/projectSlice";
-import AddText from '../../../components/editor/AssetsPanel/tools-section/AddText';
-import AddMedia from '../../../components/editor/AssetsPanel/AddButtons/UploadMedia';
-import MediaList from '../../../components/editor/AssetsPanel/tools-section/MediaList';
+import { getFile, storeProject, useAppDispatch, useAppSelector } from "@/store";
+import { getProject } from "@/store";
+import { setCurrentProject, updateProject } from "@/store/slices/projectsSlice";
+import { rehydrate, setMediaFiles } from '@/store/slices/projectSlice';
+import { setActiveSection } from "@/store/slices/projectSlice";
+import AddText from '@/components/editor/AssetsPanel/tools-section/AddText';
+import AddMedia from '@/components/editor/AssetsPanel/AddButtons/UploadMedia';
+import MediaList from '@/components/editor/AssetsPanel/tools-section/MediaList';
 import { useRouter } from 'next/navigation';
-import TextButton from "@/app/components/editor/AssetsPanel/SidebarButtons/TextButton";
-import LibraryButton from "@/app/components/editor/AssetsPanel/SidebarButtons/LibraryButton";
-import ExportButton from "@/app/components/editor/AssetsPanel/SidebarButtons/ExportButton";
-import HomeButton from "@/app/components/editor/AssetsPanel/SidebarButtons/HomeButton";
-import ShortcutsButton from "@/app/components/editor/AssetsPanel/SidebarButtons/ShortcutsButton";
-import MediaProperties from "../../../components/editor/PropertiesSection/MediaProperties";
-import TextProperties from "../../../components/editor/PropertiesSection/TextProperties";
-import { Timeline } from "../../../components/editor/timeline/Timline";
-import { PreviewPlayer } from "../../../components/editor/player/remotion/Player";
-import { MediaFile } from "@/app/types";
-import ExportList from "../../../components/editor/AssetsPanel/tools-section/ExportList";
+import TextButton from "@/components/editor/AssetsPanel/SidebarButtons/TextButton";
+import LibraryButton from "@/components/editor/AssetsPanel/SidebarButtons/LibraryButton";
+import ExportButton from "@/components/editor/AssetsPanel/SidebarButtons/ExportButton";
+import HomeButton from "@/components/editor/AssetsPanel/SidebarButtons/HomeButton";
+import ShortcutsButton from "@/components/editor/AssetsPanel/SidebarButtons/ShortcutsButton";
+import MediaProperties from "@/components/editor/PropertiesSection/MediaProperties";
+import TextProperties from "@/components/editor/PropertiesSection/TextProperties";
+import { Timeline } from "@/components/editor/timeline/Timline";
+import { PreviewPlayer } from "@/components/editor/player/remotion/Player";
+import { MediaFile } from "@/types";
+import ExportList from "@/components/editor/AssetsPanel/tools-section/ExportList";
 import Image from "next/image";
-import ProjectName from "../../../components/editor/player/ProjectName";
+import ProjectName from "@/components/editor/player/ProjectName";
+import AspectRatiosDropdown from "@/components/editor/player/AspectRatiosDropdown";
 
 export default function Project({ params }: { params: Promise<{ id: string }> }) {
     const { id } = use(params);
@@ -55,14 +56,17 @@ export default function Project({ params }: { params: Promise<{ id: string }> })
             if (currentProjectId) {
                 const project = await getProject(currentProjectId);
                 if (project) {
-                    dispatch(rehydrate(project));
-
-                    dispatch(setMediaFiles(await Promise.all(
+                    const updatedMediaFiles = await Promise.all(
                         project.mediaFiles.map(async (media: MediaFile) => {
                             const file = await getFile(media.fileId);
-                            return { ...media, src: URL.createObjectURL(file) };
+                            if (file) {
+                                return { ...media, src: URL.createObjectURL(file) };
+                            }
+                            return media;
                         })
-                    )));
+                    );
+
+                    dispatch(rehydrate({ ...project, mediaFiles: updatedMediaFiles }));
                 }
             }
         };
@@ -135,8 +139,11 @@ export default function Project({ params }: { params: Promise<{ id: string }> })
                 </div>
 
                 {/* Center - Video Preview */}
-                <div className="flex items-center justify-center flex-col flex-1 overflow-hidden">
-                    <ProjectName />
+                <div className="flex items-center justify-center flex-col flex-1 overflow-hidden bg-[#141416]">
+                    <div className="flex flex-row items-center justify-between w-full px-4 mb-2">
+                        <ProjectName />
+                        <AspectRatiosDropdown />
+                    </div>
                     <PreviewPlayer />
                 </div>
 
