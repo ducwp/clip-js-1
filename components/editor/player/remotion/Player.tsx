@@ -14,6 +14,12 @@ export const PreviewPlayer = () => {
     const isMuted = useAppSelector((state) => state.projectState.isMuted);
     const resolution = useAppSelector((state) => state.projectState.resolution);
     console.log("Player.tsx - duration:", duration, "fps:", fps);
+
+    // Scale down for preview to improve performance
+    const PREVIEW_HEIGHT = 720;
+    const previewScale = PREVIEW_HEIGHT / resolution.height;
+    const previewWidth = Math.round(resolution.width * previewScale);
+    const previewHeight = PREVIEW_HEIGHT;
     const playerRef = useRef<PlayerRef>(null);
     const dispatch = useDispatch();
 
@@ -68,8 +74,8 @@ export const PreviewPlayer = () => {
             component={Composition}
             inputProps={{}}
             durationInFrames={Math.max(30, Math.floor((isNaN(duration) ? 0 : duration) * fps) + 1)}
-            compositionWidth={resolution.width}
-            compositionHeight={resolution.height}
+            compositionWidth={previewWidth}
+            compositionHeight={previewHeight}
             fps={fps}
             style={{ width: "100%", height: "100%", backgroundColor: "#1E1D21" }}
             controls

@@ -25,33 +25,47 @@ const Composition = () => {
         }
 
     }, [frame, dispatch]);
+    const config = useVideoConfig();
+    const resolution = useAppSelector((state) => state.projectState.resolution);
+    const scaleFactor = config.height / resolution.height;
+
     return (
         <>
             <AbsoluteFill style={{ backgroundColor: 'black' }} />
-            {mediaFiles
-                .map((item: MediaFile) => {
-                    if (!item) return;
-                    const trackItem = {
-                        ...item,
-                    } as MediaFile;
-                    return (
-                        <Fragment key={trackItem.id}>
-                            {SequenceItem[trackItem.type](trackItem, { fps })}
-                        </Fragment>
-                    );
-                })}
-            {textElements
-                .map((item: TextElement) => {
-                    if (!item) return;
-                    const trackItem = {
-                        ...item,
-                    } as TextElement;
-                    return (
-                        <Fragment key={trackItem.id}>
-                            {SequenceItem["text"](trackItem, { fps })}
-                        </Fragment>
-                    );
-                })}
+            <div style={{ 
+                transform: `scale(${scaleFactor})`, 
+                transformOrigin: 'top left', 
+                width: resolution.width, 
+                height: resolution.height,
+                position: 'absolute',
+                top: 0,
+                left: 0
+            }}>
+                {mediaFiles
+                    .map((item: MediaFile) => {
+                        if (!item) return;
+                        const trackItem = {
+                            ...item,
+                        } as MediaFile;
+                        return (
+                            <Fragment key={trackItem.id}>
+                                {SequenceItem[trackItem.type](trackItem, { fps })}
+                            </Fragment>
+                        );
+                    })}
+                {textElements
+                    .map((item: TextElement) => {
+                        if (!item) return;
+                        const trackItem = {
+                            ...item,
+                        } as TextElement;
+                        return (
+                            <Fragment key={trackItem.id}>
+                                {SequenceItem["text"](trackItem, { fps })}
+                            </Fragment>
+                        );
+                    })}
+            </div>
         </>
     );
 };
