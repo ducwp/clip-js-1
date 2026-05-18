@@ -53,7 +53,7 @@ export default function ProjectName() {
             ) : (
                 <p
                     onClick={handleClick}
-                    className="text-2xl font-bold mt-4 capitalize tracking-wider cursor-pointer hover:bg-gray-800 px-2 py-1 rounded flex items-center"
+                    className="text-lg font-bold mt-4 capitalize tracking-wider cursor-pointer hover:bg-gray-800 px-2 py-1 rounded flex items-center"
                 >
                     {projectName}
                     <svg className="w-4 h-4 ml-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
