@@ -38,8 +38,8 @@ const calculateTotalDuration = (
     mediaFiles: MediaFile[],
     textElements: TextElement[]
 ): number => {
-    const mediaDurations = mediaFiles.map(v => v.positionEnd);
-    const textDurations = textElements.map(v => v.positionEnd);
+    const mediaDurations = mediaFiles.map(v => v.positionEnd).filter(v => typeof v === 'number' && !isNaN(v));
+    const textDurations = textElements.map(v => v.positionEnd).filter(v => typeof v === 'number' && !isNaN(v));
     return Math.max(0, ...mediaDurations, ...textDurations);
 };
 

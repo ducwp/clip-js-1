@@ -2,7 +2,7 @@ import { storeProject, useAppDispatch, useAppSelector } from "@/app/store";
 import { SequenceItem } from "./sequence-item";
 import { MediaFile, TextElement } from "@/app/types";
 import { useCurrentFrame, useVideoConfig } from 'remotion';
-import { use, useCallback, useEffect, useRef, useState } from "react";
+import { use, useCallback, useEffect, useRef, useState, Fragment } from "react";
 import { setCurrentTime, setMediaFiles } from "@/app/store/slices/projectSlice";
 
 const Composition = () => {
@@ -33,9 +33,11 @@ const Composition = () => {
                     const trackItem = {
                         ...item,
                     } as MediaFile;
-                    return SequenceItem[trackItem.type](trackItem, {
-                        fps
-                    });
+                    return (
+                        <Fragment key={trackItem.id}>
+                            {SequenceItem[trackItem.type](trackItem, { fps })}
+                        </Fragment>
+                    );
                 })}
             {textElements
                 .map((item: TextElement) => {
@@ -43,9 +45,11 @@ const Composition = () => {
                     const trackItem = {
                         ...item,
                     } as TextElement;
-                    return SequenceItem["text"](trackItem, {
-                        fps
-                    });
+                    return (
+                        <Fragment key={trackItem.id}>
+                            {SequenceItem["text"](trackItem, { fps })}
+                        </Fragment>
+                    );
                 })}
         </>
     );

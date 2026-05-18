@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, use } from "react";
 import { getFile, storeProject, useAppDispatch, useAppSelector } from "../../../store";
 import { getProject } from "../../../store";
 import { setCurrentProject, updateProject } from "../../../store/slices/projectsSlice";
@@ -22,8 +22,9 @@ import { MediaFile } from "@/app/types";
 import ExportList from "../../../components/editor/AssetsPanel/tools-section/ExportList";
 import Image from "next/image";
 import ProjectName from "../../../components/editor/player/ProjectName";
-export default function Project({ params }: { params: { id: string } }) {
-    const { id } = params;
+
+export default function Project({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = use(params);
     const dispatch = useAppDispatch();
     const projectState = useAppSelector((state) => state.projectState);
     const { currentProjectId } = useAppSelector((state) => state.projects);

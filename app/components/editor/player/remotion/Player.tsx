@@ -10,6 +10,7 @@ const fps = 30;
 export const PreviewPlayer = () => {
     const projectState = useAppSelector((state) => state.projectState);
     const { duration, currentTime, isPlaying, isMuted } = projectState;
+    console.log("Player.tsx - duration:", duration, "fps:", fps);
     const playerRef = useRef<PlayerRef>(null);
     const dispatch = useDispatch();
 
@@ -63,7 +64,7 @@ export const PreviewPlayer = () => {
             ref={playerRef}
             component={Composition}
             inputProps={{}}
-            durationInFrames={Math.floor(duration * fps) + 1}
+            durationInFrames={Math.max(30, Math.floor((isNaN(duration) ? 0 : duration) * fps) + 1)}
             compositionWidth={1920}
             compositionHeight={1080}
             fps={fps}
