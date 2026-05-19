@@ -35,6 +35,7 @@ import {
   Square,
   Pause,
 } from "lucide-react";
+import CaptionsButton from "@/components/editor/AssetsPanel/SidebarButtons/CaptionsButton";
 
 export default function Project({
   params,
@@ -99,7 +100,7 @@ export default function Project({
     saveProject();
   }, [projectState, dispatch]);
 
-  const handleFocus = (section: "media" | "text" | "export") => {
+  const handleFocus = (section: "media" | "captions" | "text" | "export") => {
     dispatch(setActiveSection(section));
   };
 
@@ -116,11 +117,12 @@ export default function Project({
       ) : null}
       <div className="flex flex-1 overflow-hidden">
         {/* Left Sidebar - Buttons */}
-        <div className="flex-[0.1] min-w-[60px] max-w-[100px] border-r border-gray-700 overflow-y-auto p-4">
+        <div className="flex-[0.1] min-w-[60px] max-w-[80px] border-r border-gray-700 overflow-y-auto p-2">
           <div className="flex flex-col space-y-2">
             <HomeButton />
-            <TextButton onClick={() => handleFocus("text")} />
             <LibraryButton onClick={() => handleFocus("media")} />
+            <CaptionsButton onClick={() => handleFocus("captions")} />
+            <TextButton onClick={() => handleFocus("text")} />
             <ExportButton onClick={() => handleFocus("export")} />
             {/* TODO: add shortcuts guide but in a better way */}
             {/* <ShortcutsButton onClick={() => handleFocus("export")} /> */}

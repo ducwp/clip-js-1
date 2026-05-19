@@ -1,19 +1,15 @@
-import Image from 'next/image';
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { CloudUpload} from "lucide-react";
 
 export default function LibraryButton({ onClick }: { onClick: () => void }) {
-    return (
-        <button
-            className="bg-white border border-solid rounded border-transparent transition-colors flex flex-col items-center justify-center text-gray-800 hover:bg-[#ccc] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-auto py-2 px-2 sm:px-5 sm:w-auto"
-            onClick={onClick}
-        >
-            <Image
-                alt="Library"
-                className="h-auto w-auto max-w-[30px] max-h-[30px]"
-                height={30}
-                width={30}
-                src="https://www.svgrepo.com/show/514275/upload-cloud.svg"
-            />
-            <span className="text-xs">Library</span>
-        </button>
-    );
+  return (
+    <Button
+      variant="outline"
+      onClick={onClick}
+      className="flex flex-col items-center justify-center h-auto py-2 px-2 sm:px-5 sm:w-auto">
+      <CloudUpload className="invert h-auto w-auto max-w-[24px] max-h-[24px] text-black" />
+      <span className="text-xs">Library</span>
+    </Button>
+  );
 }

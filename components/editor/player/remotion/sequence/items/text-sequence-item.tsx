@@ -104,54 +104,56 @@ export const TextSequenceItem: React.FC<{ item: TextElement; options: SequenceIt
     // TODO: add more options for text
     return (
         <Sequence
-            className={`designcombo-scene-item id-${item.id} designcombo-scene-item-type-text `}
             key={item.id}
             from={from}
             durationInFrames={durationInFrames + REMOTION_SAFE_FRAME}
-            data-track-item="transition-element"
-            style={{
-                position: "absolute",
-                width: item.width || 3000,
-                height: item.height || 400,
-                fontSize: item.fontSize || "16px",
-                top: localPos.y,
-                left: localPos.x,
-                color: item.color || "#000000",
-                zIndex: 1000,
-                // backgroundColor: item.backgroundColor || "transparent",
-                opacity: item.opacity! / 100,
-                fontFamily: item.font || "Arial",
-            }}
+            style={{ pointerEvents: "none" }}
         >
             <div
-                data-text-id={item.id}
+                className={`designcombo-scene-item id-${item.id} designcombo-scene-item-type-text`}
+                data-track-item="transition-element"
                 style={{
-                    height: "100%",
-                    boxShadow: "none",
-                    outline: "none",
-                    whiteSpace: "normal",
-                    backgroundColor: item.backgroundColor || "transparent",
-                    position: "relative",
-                    width: "100%",
-                    cursor:"move",
+                    position: "absolute",
+                    width: item.width || "max-content",
+                    height: item.height || "auto",
+                    fontSize: item.fontSize || "16px",
+                    top: localPos.y,
+                    left: localPos.x,
+                    color: item.color || "#000000",
+                    zIndex: 1000,
+                    opacity: item.opacity! / 100,
+                    fontFamily: item.font || "Arial",
+                    pointerEvents: "auto",
                 }}
-                onMouseDown={handleMouseDown}
-                // onMouseMove={handleMouseMove}
-                // onMouseUp={handleMouseUp}
-                dangerouslySetInnerHTML={{ __html: item.text }}
-                className="designcombo_textLayer"
-            />
-            {isSelected && (
-                <div style={{ 
-                    position: 'absolute', 
-                    top: 0, 
-                    left: 0, 
-                    right: 0, 
-                    bottom: 0, 
-                    border: '3px solid #3b82f6', 
-                    pointerEvents: 'none'
-                }} />
-            )}
+            >
+                <div
+                    data-text-id={item.id}
+                    style={{
+                        height: "auto",
+                        boxShadow: "none",
+                        outline: "none",
+                        whiteSpace: "normal",
+                        backgroundColor: item.backgroundColor || "transparent",
+                        position: "relative",
+                        width: "100%",
+                        cursor: "move",
+                    }}
+                    onMouseDown={handleMouseDown}
+                    dangerouslySetInnerHTML={{ __html: item.text }}
+                    className="designcombo_textLayer"
+                />
+                {isSelected && (
+                    <div style={{ 
+                        position: 'absolute', 
+                        top: 0, 
+                        left: 0, 
+                        right: 0, 
+                        bottom: 0, 
+                        border: '3px solid #3b82f6', 
+                        pointerEvents: 'none'
+                    }} />
+                )}
+            </div>
         </Sequence>
     );
 };
