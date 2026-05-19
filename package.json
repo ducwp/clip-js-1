@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@andresaya/edge-tts": "^1.8.0",
-    "@base-ui/react": "^1.4.1",
     "@deepgram/captions": "^1.2.0",
     "@deepgram/sdk": "^5.2.0",
     "@ffmpeg/ffmpeg": "*",
@@ -26,6 +25,7 @@
     "@types/uuid": "^10.0.0",
     "@vercel/analytics": "^1.5.0",
     "basehub": "^8.2.11",
+    "bufferutil": "^4.1.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "eslint": "8.46.0",

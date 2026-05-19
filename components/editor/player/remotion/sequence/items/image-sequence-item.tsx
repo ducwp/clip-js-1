@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { AbsoluteFill, Img, Sequence, useVideoConfig } from "remotion";
+import { PlayerSelectionOutline, OutlineItem } from "./PlayerSelectionOutline";
 import { MediaFile } from "@/types";
 import { useAppSelector, useAppDispatch } from "@/store";
 import { setMediaFiles, setActiveElement, setActiveElementIndex } from "@/store/slices/projectSlice";
@@ -33,75 +34,25 @@ export const ImageSequenceItem: React.FC<ImageSequenceItemProps> = ({ item, opti
     const dispatch = useAppDispatch();
     const { mediaFiles, resolution, activeElement, activeElementIndex } = useAppSelector((state) => state.projectState);
     const config = useVideoConfig();
+    const [renderKey, setRenderKey] = useState(0);
 
     const isSelected = activeElement === 'media' && mediaFiles[activeElementIndex]?.id === item.id;
 
-    const [isDragging, setIsDragging] = useState(false);
-    const [localPos, setLocalPos] = useState({ x: item.x, y: item.y });
-    const startMousePos = useRef({ x: 0, y: 0 });
-    const startElementPos = useRef({ x: 0, y: 0 });
-    const localPosRef = useRef({ x: item.x, y: item.y });
+    const targetRef = useRef<HTMLDivElement>(null);
+    const compScale = config.width / resolution.width;
 
-    useEffect(() => {
-        setLocalPos({ x: item.x, y: item.y });
-        localPosRef.current = { x: item.x, y: item.y };
-    }, [item.x, item.y]);
+    const handleUpdate = useCallback((id: string, updates: Partial<OutlineItem>) => {
+        const updated = mediaFiles.map(f =>
+            f.id === id ? { ...f, ...updates } : f
+        );
+        dispatch(setMediaFiles(updated));
+    }, [mediaFiles, dispatch]);
 
     const onMouseDown = (e: React.MouseEvent) => {
         e.stopPropagation();
-        setIsDragging(true);
-        startMousePos.current = { x: e.clientX, y: e.clientY };
-        startElementPos.current = { x: localPos.x, y: localPos.y };
         dispatch(setActiveElement("media"));
         dispatch(setActiveElementIndex(mediaFiles.findIndex(f => f.id === item.id)));
     };
-
-    useEffect(() => {
-        const onMouseMove = (e: MouseEvent) => {
-            if (!isDragging) return;
-            const scaleFactor = config.height / resolution.height;
-            const deltaX = (e.clientX - startMousePos.current.x) / scaleFactor;
-            const deltaY = (e.clientY - startMousePos.current.y) / scaleFactor;
-            
-            const newX = startElementPos.current.x + deltaX;
-            const newY = startElementPos.current.y + deltaY;
-
-            const SNAP_THRESHOLD = 20 / scaleFactor; // 20px on screen
-            let snappedX = newX;
-            let snappedY = newY;
-
-            // Snap to edges of canvas
-            if (Math.abs(newX) < SNAP_THRESHOLD) snappedX = 0;
-            if (Math.abs(newX + item.width - resolution.width) < SNAP_THRESHOLD) snappedX = resolution.width - item.width;
-
-            if (Math.abs(newY) < SNAP_THRESHOLD) snappedY = 0;
-            if (Math.abs(newY + item.height - resolution.height) < SNAP_THRESHOLD) snappedY = resolution.height - item.height;
-
-            const newPos = { x: snappedX, y: snappedY };
-            setLocalPos(newPos);
-            localPosRef.current = newPos;
-        };
-
-        const onMouseUp = () => {
-            if (!isDragging) return;
-            setIsDragging(false);
-            
-            const updated = mediaFiles.map(f => 
-                f.id === item.id ? { ...f, x: localPosRef.current.x, y: localPosRef.current.y } : f
-            );
-            dispatch(setMediaFiles(updated));
-        };
-
-        if (isDragging) {
-            window.addEventListener('mousemove', onMouseMove);
-            window.addEventListener('mouseup', onMouseUp);
-        }
-
-        return () => {
-            window.removeEventListener('mousemove', onMouseMove);
-            window.removeEventListener('mouseup', onMouseUp);
-        };
-    }, [isDragging, dispatch, mediaFiles, item.id, config.height, item.height, item.width, resolution.height, resolution.width]);
 
     const { from, durationInFrames } = calculateFrames(
         {
@@ -120,65 +71,59 @@ export const ImageSequenceItem: React.FC<ImageSequenceItemProps> = ({ item, opti
 
     return (
         <Sequence
-            key={item.id}
+            key={`${item.id}-${renderKey}`}
             from={from}
             durationInFrames={durationInFrames + REMOTION_SAFE_FRAME}
             style={{ pointerEvents: "none" }}
         >
-            <AbsoluteFill
-                data-track-item="transition-element"
-                className={`designcombo-scene-item id-${item.id} designcombo-scene-item-type-${item.type}`}
-                onMouseDown={onMouseDown}
-                style={{
-                    pointerEvents: "auto",
-                    top: localPos.y,
-                    left: localPos.x,
-                    width: item.width || "100%",
-                    height: item.height || "auto",
-                    cursor: isDragging ? 'grabbing' : 'grab',
-                    // transform: item?.transform || "none",
-                    opacity:
-                        item?.opacity !== undefined
-                            ? item.opacity / 100
-                            : 1,
-                    overflow: "hidden",
-                }}
-            >
+            <AbsoluteFill style={{ pointerEvents: "none", position: "relative" }}>
                 <div
+                    ref={targetRef}
+                    data-track-item="transition-element"
+                    className={`designcombo-scene-item id-${item.id} designcombo-scene-item-type-${item.type}`}
+                    onMouseDown={onMouseDown}
                     style={{
-                        width: item.width || "100%",
-                        height: item.height || "auto",
-                        position: "relative",
+                        pointerEvents: "auto",
+                        position: "absolute",
+                        top: `${item.y * compScale}px`,
+                        left: `${item.x * compScale}px`,
+                        width: `${(item.width || resolution.width) * compScale}px`,
+                        height: `${(item.height || resolution.height) * compScale}px`,
+                        opacity: item?.opacity !== undefined ? item.opacity / 100 : 1,
                         overflow: "hidden",
-                        pointerEvents: "none",
+                        transform: "none",
+                        zIndex: item.zIndex,
                     }}
                 >
                     <Img
                         style={{
                             pointerEvents: "none",
-                            top: -crop.y || 0,
-                            left: -crop.x || 0,
-                            width: item.width || "100%",
-                            height: item.height || "auto",
+                            width: "100%",
+                            height: "100%",
                             position: "absolute",
+                            objectFit: "fill",
                             zIndex: item.zIndex || 0,
                         }}
                         data-id={item.id}
                         src={item.src || ""}
                     />
                 </div>
-                {isSelected && (
-                    <div style={{ 
-                        position: 'absolute', 
-                        top: 0, 
-                        left: 0, 
-                        right: 0, 
-                        bottom: 0, 
-                        border: '3px solid #3b82f6', 
-                        pointerEvents: 'none'
-                    }} />
-                )}
             </AbsoluteFill>
+
+            {isSelected && (
+                <PlayerSelectionOutline
+                    item={{
+                        id: item.id,
+                        x: item.x,
+                        y: item.y,
+                        width: item.width || resolution.width,
+                        height: item.height || resolution.height,
+                    }}
+                    onUpdate={handleUpdate}
+                    compScale={compScale}
+                    targetRef={targetRef}
+                />
+            )}
         </Sequence>
     );
 };

@@ -1,9 +1,9 @@
 "use client";
 
-import { getFile, useAppDispatch, useAppSelector } from "../../../../store";
-import { setMediaFiles } from "../../../../store/slices/projectSlice";
-import { storeFile } from "../../../../store";
-import { categorizeFile } from "../../../../utils/utils";
+import { getFile, useAppDispatch, useAppSelector } from "@/store";
+import { setMediaFiles } from "@/store/slices/projectSlice";
+import { storeFile } from "@/store";
+import { categorizeFile } from "@/utils/utils";
 import Image from 'next/image';
 import toast from 'react-hot-toast';
 
@@ -24,8 +24,8 @@ export default function AddMedia({ fileId }: { fileId: string }) {
                 : 0;
 
             const fileType = categorizeFile(file.type);
-            let vWidth = 1920;
-            let vHeight = 1080;
+            let vWidth = 1000;
+            let vHeight = 1000;
             let duration = 30; // Default fallback
 
             if (fileType === 'video' || fileType === 'image' || fileType === 'audio') {

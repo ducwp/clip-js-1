@@ -97,9 +97,9 @@ export const PreviewPlayer = () => {
   };
 
   return (
-    <div className="flex flex-col w-full h-full items-center justify-center bg-[#141416]">
+    <>
       <div
-        className="flex-1 w-full flex items-center justify-center overflow-hidden"
+        className="flex-1 w-full flex items-center justify-center overflow-hidden my-4"
         onClick={handleClickOutside}
       >
         <Player
@@ -113,10 +113,11 @@ export const PreviewPlayer = () => {
           compositionWidth={previewWidth}
           compositionHeight={previewHeight}
           fps={fps}
-          style={{ width: "100%", height: "100%", backgroundColor: "#1E1D21" }}
+          style={{ width: "100%", height: "100%"}}
           controls={false}
           clickToPlay={false}
           acknowledgeRemotionLicense={true}
+          className="bg-gray-700"
         />
       </div>
 
@@ -171,6 +172,6 @@ export const PreviewPlayer = () => {
         {/* Placeholder for alignment */}
         <div className="w-10"></div>
       </div>
-    </div>
+    </>
   );
 };

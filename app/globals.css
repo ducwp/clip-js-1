@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
 @theme {
   --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));

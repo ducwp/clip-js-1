@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useMemo, useState, useCallback } from "react";
 import { AbsoluteFill, OffthreadVideo, Sequence, useVideoConfig } from "remotion";
+import { PlayerSelectionOutline, OutlineItem } from "./PlayerSelectionOutline";
 import { MediaFile } from "@/types";
 import { useAppSelector, useAppDispatch } from "@/store";
 import { setMediaFiles, setActiveElement, setActiveElementIndex } from "@/store/slices/projectSlice";
@@ -36,74 +37,33 @@ export const VideoSequenceItem: React.FC<VideoSequenceItemProps> = ({ item, opti
 
     const isSelected = activeElement === 'media' && mediaFiles[activeElementIndex]?.id === item.id;
 
-    const [isDragging, setIsDragging] = useState(false);
-    const [localPos, setLocalPos] = useState({ x: item.x, y: item.y });
-    const startMousePos = useRef({ x: 0, y: 0 });
-    const startElementPos = useRef({ x: 0, y: 0 });
-    const localPosRef = useRef({ x: item.x, y: item.y });
+    const targetRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        setLocalPos({ x: item.x, y: item.y });
-        localPosRef.current = { x: item.x, y: item.y };
-    }, [item.x, item.y]);
+    // Scale factor: composition coords -> resolution coords
+    // config.width is the composition width (e.g. 1280), resolution.width is 1920
+    const compScale = config.width / resolution.width; // e.g. 1280/1920 = 0.667
+
+    // Positions/sizes in composition space (what Remotion renders in)
+    const compX = item.x * compScale;
+    const compY = item.y * compScale;
+    const compW = (item.width || resolution.width) * compScale;
+    const compH = (item.height || resolution.height) * compScale;
+
+    const handleUpdate = useCallback((id: string, updates: Partial<OutlineItem>) => {
+        const updated = mediaFiles.map(f =>
+            f.id === id ? { ...f, ...updates } : f
+        );
+        dispatch(setMediaFiles(updated));
+    }, [mediaFiles, dispatch]);
 
     const onMouseDown = (e: React.MouseEvent) => {
         e.stopPropagation();
-        setIsDragging(true);
-        startMousePos.current = { x: e.clientX, y: e.clientY };
-        startElementPos.current = { x: localPos.x, y: localPos.y };
         dispatch(setActiveElement("media"));
         dispatch(setActiveElementIndex(mediaFiles.findIndex(f => f.id === item.id)));
     };
 
-    useEffect(() => {
-        const onMouseMove = (e: MouseEvent) => {
-            if (!isDragging) return;
-            const scaleFactor = config.height / resolution.height;
-            const deltaX = (e.clientX - startMousePos.current.x) / scaleFactor;
-            const deltaY = (e.clientY - startMousePos.current.y) / scaleFactor;
-            
-            const newX = startElementPos.current.x + deltaX;
-            const newY = startElementPos.current.y + deltaY;
-
-            const SNAP_THRESHOLD = 20 / scaleFactor; // 20px on screen
-            let snappedX = newX;
-            let snappedY = newY;
-
-            // Snap to edges of canvas
-            if (Math.abs(newX) < SNAP_THRESHOLD) snappedX = 0;
-            if (Math.abs(newX + item.width - resolution.width) < SNAP_THRESHOLD) snappedX = resolution.width - item.width;
-
-            if (Math.abs(newY) < SNAP_THRESHOLD) snappedY = 0;
-            if (Math.abs(newY + item.height - resolution.height) < SNAP_THRESHOLD) snappedY = resolution.height - item.height;
-
-            const newPos = { x: snappedX, y: snappedY };
-            setLocalPos(newPos);
-            localPosRef.current = newPos;
-        };
-
-        const onMouseUp = () => {
-            if (!isDragging) return;
-            setIsDragging(false);
-            
-            const updated = mediaFiles.map(f => 
-                f.id === item.id ? { ...f, x: localPosRef.current.x, y: localPosRef.current.y } : f
-            );
-            dispatch(setMediaFiles(updated));
-        };
-
-        if (isDragging) {
-            window.addEventListener('mousemove', onMouseMove);
-            window.addEventListener('mouseup', onMouseUp);
-        }
-
-        return () => {
-            window.removeEventListener('mousemove', onMouseMove);
-            window.removeEventListener('mouseup', onMouseUp);
-        };
-    }, [isDragging, dispatch, mediaFiles, item.id, config.height, item.height, item.width, resolution.height, resolution.width]);
-
     const playbackRate = item.playbackSpeed || 1;
+
     const { from, durationInFrames } = calculateFrames(
         {
             from: item.positionStart,
@@ -112,18 +72,24 @@ export const VideoSequenceItem: React.FC<VideoSequenceItemProps> = ({ item, opti
         fps
     );
 
-    // TODO: Add crop
-    // const crop = item.crop || {
-    //     x: 0,
-    //     y: 0,
-    //     width: item.width,
-    //     height: item.height
-    // };
-
     const trim = {
         from: (item.startTime) / playbackRate,
         to: (item.endTime) / playbackRate
     };
+
+    const videoStyle = useMemo<React.CSSProperties>(() => ({
+        pointerEvents: "auto",
+        position: "absolute",
+        top: `${compY}px`,
+        left: `${compX}px`,
+        width: `${compW}px`,
+        height: `${compH}px`,
+        transform: "none",
+        zIndex: item.zIndex,
+        opacity: item?.opacity !== undefined ? item.opacity / 100 : 1,
+        borderRadius: `10px`,
+        overflow: "hidden",
+    }), [compX, compY, compW, compH, item.zIndex, item.opacity]);
 
     return (
         <Sequence
@@ -132,35 +98,14 @@ export const VideoSequenceItem: React.FC<VideoSequenceItemProps> = ({ item, opti
             durationInFrames={durationInFrames + REMOTION_SAFE_FRAME}
             style={{ pointerEvents: "none" }}
         >
-            <AbsoluteFill
-                data-track-item="transition-element"
-                className={`designcombo-scene-item id-${item.id} designcombo-scene-item-type-${item.type}`}
-                onMouseDown={onMouseDown}
-                style={{
-                    pointerEvents: "auto",
-                    top: localPos.y,
-                    left: localPos.x,
-                    width: item.width || "100%",
-                    height: item.height || "auto",
-                    cursor: isDragging ? 'grabbing' : 'grab',
-                    transform: "none",
-                    zIndex: item.zIndex,
-                    opacity:
-                        item?.opacity !== undefined
-                            ? item.opacity / 100
-                            : 1,
-                    borderRadius: `10px`, // Default border radius
-                    overflow: "hidden",
-                }}
-            >
+            {/* Use a wrapper AbsoluteFill just to provide pointer-events, the actual positioned div is inside */}
+            <AbsoluteFill style={{ pointerEvents: "none", position: "relative" }}>
                 <div
-                    style={{
-                        width: item.width || "100%",
-                        height: item.height || "auto",
-                        position: "relative",
-                        overflow: "hidden",
-                        pointerEvents: "none",
-                    }}
+                    ref={targetRef}
+                    data-track-item="transition-element"
+                    className={`designcombo-scene-item id-${item.id} designcombo-scene-item-type-${item.type}`}
+                    onMouseDown={onMouseDown}
+                    style={videoStyle}
                 >
                     <OffthreadVideo
                         startFrom={(trim.from) * fps}
@@ -170,27 +115,28 @@ export const VideoSequenceItem: React.FC<VideoSequenceItemProps> = ({ item, opti
                         volume={item.volume !== undefined ? item.volume / 100 : 1}
                         style={{
                             pointerEvents: "none",
-                            top: 0,
-                            left: 0,
-                            width: item.width || "100%", // Default width
-                            height: item.height || "auto", // Default height
-                            position: "absolute"
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "fill",
                         }}
                     />
                 </div>
-                {isSelected && (
-                    <div style={{ 
-                        position: 'absolute', 
-                        top: 0, 
-                        left: 0, 
-                        right: 0, 
-                        bottom: 0, 
-                        border: '3px solid #3b82f6', 
-                        pointerEvents: 'none', 
-                        borderRadius: '10px'
-                    }} />
-                )}
             </AbsoluteFill>
+
+            {isSelected && (
+                <PlayerSelectionOutline
+                    item={{
+                        id: item.id,
+                        x: item.x,
+                        y: item.y,
+                        width: item.width || resolution.width,
+                        height: item.height || resolution.height,
+                    }}
+                    onUpdate={handleUpdate}
+                    compScale={compScale}
+                    targetRef={targetRef}
+                />
+            )}
         </Sequence>
     );
 };

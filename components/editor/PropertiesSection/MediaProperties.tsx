@@ -8,9 +8,10 @@ import {
 } from "../../../store/slices/projectSlice";
 import { MediaFile } from "../../../types";
 import { useAppDispatch } from "../../../store";
-import { Button } from "@/components/ui/button";
+
 
 //Shadcn UI
+import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -40,7 +41,7 @@ export default function MediaProperties() {
         {/* Source Video */}
         <div className="space-y-2">
           <h4 className="font-semibold">Source Video</h4>
-          <Button>Test Button</Button>
+          
           <div className="flex items-center space-x-4">
             <div>
               <label className="block text-sm">Start (s)</label>
@@ -188,6 +189,7 @@ export default function MediaProperties() {
               </div>
               <div>
                 <label className="block text-sm">Opacity</label>
+                
                 <input
                   type="range"
                   min="0"

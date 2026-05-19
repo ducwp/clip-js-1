@@ -1,0 +1,30 @@
+/* Styles for react-moveable handles to make them larger and more visible */
+
+.moveable-control {
+  width: 16px !important;
+  height: 16px !important;
+  background: #fff;
+  border: 2px solid #3b82f6;
+  border-radius: 3px;
+  box-sizing: border-box;
+  cursor: pointer;
+  pointer-events: auto !important;
+}
+
+.moveable-direction {
+  background: #3b82f6 !important;
+}
+
+.moveable-control-box {
+  pointer-events: auto !important;
+}
+
+/* Increase hit area for better clicking */
+.moveable-control::after {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+}
