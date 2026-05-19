@@ -28,7 +28,7 @@ export default function AddMedia({ fileId }: { fileId: string }) {
             let vHeight = 1080;
             let duration = 30; // Default fallback
 
-            if (fileType === 'video' || fileType === 'image') {
+            if (fileType === 'video' || fileType === 'image' || fileType === 'audio') {
                 try {
                     const dimensions = await new Promise<{ width: number, height: number, duration: number }>((resolve, reject) => {
                         const url = URL.createObjectURL(file);
@@ -41,6 +41,15 @@ export default function AddMedia({ fileId }: { fileId: string }) {
                             };
                             video.onerror = () => reject('Error loading video');
                             video.src = url;
+                        } else if (fileType === 'audio') {
+                            const audio = document.createElement('audio');
+                            audio.preload = 'metadata';
+                            audio.onloadedmetadata = () => {
+                                URL.revokeObjectURL(url);
+                                resolve({ width: 0, height: 0, duration: audio.duration });
+                            };
+                            audio.onerror = () => reject('Error loading audio');
+                            audio.src = url;
                         } else {
                             const img = new window.Image();
                             img.onload = () => {
@@ -63,9 +72,14 @@ export default function AddMedia({ fileId }: { fileId: string }) {
             // Calculate scaled dimensions to fit project resolution
             const pWidth = resolution.width;
             const pHeight = resolution.height;
-            const scale = Math.min(pWidth / vWidth, pHeight / vHeight);
-            const scaledWidth = vWidth * scale;
-            const scaledHeight = vHeight * scale;
+            let scaledWidth = 0;
+            let scaledHeight = 0;
+
+            if (fileType !== 'audio') {
+                const scale = Math.min(pWidth / vWidth, pHeight / vHeight);
+                scaledWidth = vWidth * scale;
+                scaledHeight = vHeight * scale;
+            }
 
             updatedMedia.push({
                 id: mediaId,

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { AbsoluteFill, OffthreadVideo, Sequence, useVideoConfig } from "remotion";
 import { MediaFile } from "@/types";
 import { useAppSelector, useAppDispatch } from "@/store";
-import { setMediaFiles } from "@/store/slices/projectSlice";
+import { setMediaFiles, setActiveElement, setActiveElementIndex } from "@/store/slices/projectSlice";
 
 const REMOTION_SAFE_FRAME = 0;
 
@@ -31,8 +31,10 @@ interface VideoSequenceItemProps {
 export const VideoSequenceItem: React.FC<VideoSequenceItemProps> = ({ item, options }) => {
     const { fps } = options;
     const dispatch = useAppDispatch();
-    const { mediaFiles, resolution } = useAppSelector((state) => state.projectState);
+    const { mediaFiles, resolution, activeElement, activeElementIndex } = useAppSelector((state) => state.projectState);
     const config = useVideoConfig();
+
+    const isSelected = activeElement === 'media' && mediaFiles[activeElementIndex]?.id === item.id;
 
     const [isDragging, setIsDragging] = useState(false);
     const [localPos, setLocalPos] = useState({ x: item.x, y: item.y });
@@ -50,6 +52,8 @@ export const VideoSequenceItem: React.FC<VideoSequenceItemProps> = ({ item, opti
         setIsDragging(true);
         startMousePos.current = { x: e.clientX, y: e.clientY };
         startElementPos.current = { x: localPos.x, y: localPos.y };
+        dispatch(setActiveElement("media"));
+        dispatch(setActiveElementIndex(mediaFiles.findIndex(f => f.id === item.id)));
     };
 
     useEffect(() => {
@@ -97,7 +101,7 @@ export const VideoSequenceItem: React.FC<VideoSequenceItemProps> = ({ item, opti
             window.removeEventListener('mousemove', onMouseMove);
             window.removeEventListener('mouseup', onMouseUp);
         };
-    }, [isDragging, dispatch, mediaFiles, item.id]);
+    }, [isDragging, dispatch, mediaFiles, item.id, config.height, item.height, item.width, resolution.height, resolution.width]);
 
     const playbackRate = item.playbackSpeed || 1;
     const { from, durationInFrames } = calculateFrames(
@@ -174,6 +178,18 @@ export const VideoSequenceItem: React.FC<VideoSequenceItemProps> = ({ item, opti
                         }}
                     />
                 </div>
+                {isSelected && (
+                    <div style={{ 
+                        position: 'absolute', 
+                        top: 0, 
+                        left: 0, 
+                        right: 0, 
+                        bottom: 0, 
+                        border: '3px solid #3b82f6', 
+                        pointerEvents: 'none', 
+                        borderRadius: '10px'
+                    }} />
+                )}
             </AbsoluteFill>
         </Sequence>
     );

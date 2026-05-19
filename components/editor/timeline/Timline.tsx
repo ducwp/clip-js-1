@@ -13,8 +13,9 @@ import { useDispatch } from "react-redux";
 import Image from "next/image";
 import Header from "./Header";
 import VideoTimeline from "./elements-timeline/VideoTimeline";
-import ImageTimeline from "./elements-timeline/ImageTimeline";
 import AudioTimeline from "./elements-timeline/AudioTimline";
+import CaptionsTimeline from "./elements-timeline/CaptionsTimeline";
+import ImageTimeline from "./elements-timeline/ImageTimeline";
 import TextTimeline from "./elements-timeline/TextTimeline";
 import { throttle } from "lodash";
 import GlobalKeyHandlerProps from "../../../components/editor/keys/GlobalKeyHandlerProps";
@@ -335,19 +336,23 @@ export const Timeline = () => {
           />
           {/* Timeline elements */}
           <div className="w-full">
-            <div className="relative h-16 z-10">
+            <div className="relative h-12 z-10">
               <VideoTimeline />
             </div>
 
-            <div className="relative h-16 z-10">
+            <div className="relative h-12 z-10">
               <AudioTimeline />
             </div>
 
-            <div className="relative h-16 z-10">
+            <div className="relative h-12 z-10">
+              <CaptionsTimeline />
+            </div>
+
+            <div className="relative h-12 z-10">
               <ImageTimeline />
             </div>
 
-            <div className="relative h-16 z-10">
+            <div className="relative h-12 z-10">
               <TextTimeline />
             </div>
           </div>

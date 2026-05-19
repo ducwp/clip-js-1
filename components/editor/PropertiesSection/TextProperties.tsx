@@ -1,9 +1,15 @@
 "use client";
 
-import { useAppSelector } from '../../../store';
-import { setActiveElement, setTextElements } from '../../../store/slices/projectSlice';
-import { TextElement } from '../../../types';
-import { useAppDispatch } from '../../../store';
+import { useAppSelector } from '@/store';
+import { setActiveElement, setTextElements } from '@/store/slices/projectSlice';
+import { TextElement } from '@/types';
+import { useAppDispatch } from '@/store';
+
+//Shadcn UI
+import { Button } from "@/components/ui/button";
+// import { Input } from "@/components/ui/input";
+// import { Label } from "@/components/ui/label";
+import { Textarea } from '@/components/ui/textarea';
 
 export default function TextProperties() {
     const { textElements, activeElementIndex } = useAppSelector((state) => state.projectState);
@@ -20,15 +26,15 @@ export default function TextProperties() {
 
     return (
         <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 gap-8">
                 {/* Text Content */}
                 <div className="space-y-2">
                     <h4 className="font-semibold">Text Content</h4>
                     <div>
-                        <textarea
+                        <Textarea
                             value={textElement.text}
                             onChange={(e) => onUpdateText(textElement.id, { text: e.target.value })}
-                            className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-hidden focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                            className="h-24"
                             rows={3}
                         />
                     </div>

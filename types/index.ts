@@ -1,4 +1,4 @@
-export type MediaType = 'video' | 'audio' | 'image' | 'unknown';
+export type MediaType = 'video' | 'audio' | 'captions' | 'image' | 'unknown';
 
 export interface UploadedFile {
     id: string;
