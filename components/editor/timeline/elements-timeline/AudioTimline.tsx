@@ -9,6 +9,9 @@ import Header from "../Header";
 import { MediaFile } from "@/types";
 import { debounce, throttle } from "lodash";
 
+//icons
+import { FaPlay, FaPause } from "react-icons/fa";
+
 export default function AudioTimeline() {
     const targetRefs = useRef<Record<string, HTMLDivElement | null>>({});
     const { mediaFiles, textElements, activeElement, activeElementIndex, timelineZoom } = useAppSelector((state) => state.projectState);
@@ -117,6 +120,7 @@ export default function AudioTimeline() {
                                 width={30}
                                 src="https://www.svgrepo.com/show/532708/music.svg"
                             />
+                            <FaPlay className="h-3 w-3 mr-1" />
                             <span className="truncate text-x">{clip.fileName}</span>
 
                         </div>

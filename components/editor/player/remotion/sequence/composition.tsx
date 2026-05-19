@@ -10,12 +10,15 @@ const Composition = () => {
     const textElements = useAppSelector((state) => state.projectState.textElements);
     const frame = useCurrentFrame();
     const dispatch = useAppDispatch();
+    const isPlaying = useAppSelector((state) => state.projectState.isPlaying);
 
     const fps = 30;
     const THRESHOLD = 0.1; // Minimum change to trigger dispatch (in seconds)
     const previousTime = useRef(0); // Store previous time to track changes
 
     useEffect(() => {
+        if (!isPlaying) return; // Only sync when playing!
+        
         const currentTimeInSeconds = frame / fps;
         if (Math.abs(currentTimeInSeconds - previousTime.current) > THRESHOLD) {
             if (currentTimeInSeconds !== undefined) {
@@ -24,7 +27,7 @@ const Composition = () => {
             }
         }
 
-    }, [frame, dispatch]);
+    }, [frame, dispatch, isPlaying]);
     const config = useVideoConfig();
     const resolution = useAppSelector((state) => state.projectState.resolution);
     const scaleFactor = config.height / resolution.height;

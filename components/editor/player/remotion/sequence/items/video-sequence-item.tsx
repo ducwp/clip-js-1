@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { AbsoluteFill, OffthreadVideo, Sequence } from "remotion";
+import { AbsoluteFill, OffthreadVideo, Sequence, useVideoConfig } from "remotion";
 import { MediaFile } from "@/types";
 import { useAppSelector, useAppDispatch } from "@/store";
 import { setMediaFiles } from "@/store/slices/projectSlice";
@@ -31,7 +31,8 @@ interface VideoSequenceItemProps {
 export const VideoSequenceItem: React.FC<VideoSequenceItemProps> = ({ item, options }) => {
     const { fps } = options;
     const dispatch = useAppDispatch();
-    const mediaFiles = useAppSelector((state) => state.projectState.mediaFiles);
+    const { mediaFiles, resolution } = useAppSelector((state) => state.projectState);
+    const config = useVideoConfig();
 
     const [isDragging, setIsDragging] = useState(false);
     const [localPos, setLocalPos] = useState({ x: item.x, y: item.y });
@@ -54,12 +55,25 @@ export const VideoSequenceItem: React.FC<VideoSequenceItemProps> = ({ item, opti
     useEffect(() => {
         const onMouseMove = (e: MouseEvent) => {
             if (!isDragging) return;
-            const deltaX = e.clientX - startMousePos.current.x;
-            const deltaY = e.clientY - startMousePos.current.y;
-            const newPos = {
-                x: startElementPos.current.x + deltaX,
-                y: startElementPos.current.y + deltaY
-            };
+            const scaleFactor = config.height / resolution.height;
+            const deltaX = (e.clientX - startMousePos.current.x) / scaleFactor;
+            const deltaY = (e.clientY - startMousePos.current.y) / scaleFactor;
+            
+            const newX = startElementPos.current.x + deltaX;
+            const newY = startElementPos.current.y + deltaY;
+
+            const SNAP_THRESHOLD = 20 / scaleFactor; // 20px on screen
+            let snappedX = newX;
+            let snappedY = newY;
+
+            // Snap to edges of canvas
+            if (Math.abs(newX) < SNAP_THRESHOLD) snappedX = 0;
+            if (Math.abs(newX + item.width - resolution.width) < SNAP_THRESHOLD) snappedX = resolution.width - item.width;
+
+            if (Math.abs(newY) < SNAP_THRESHOLD) snappedY = 0;
+            if (Math.abs(newY + item.height - resolution.height) < SNAP_THRESHOLD) snappedY = resolution.height - item.height;
+
+            const newPos = { x: snappedX, y: snappedY };
             setLocalPos(newPos);
             localPosRef.current = newPos;
         };

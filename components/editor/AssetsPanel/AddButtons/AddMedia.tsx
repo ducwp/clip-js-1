@@ -26,17 +26,18 @@ export default function AddMedia({ fileId }: { fileId: string }) {
             const fileType = categorizeFile(file.type);
             let vWidth = 1920;
             let vHeight = 1080;
+            let duration = 30; // Default fallback
 
             if (fileType === 'video' || fileType === 'image') {
                 try {
-                    const dimensions = await new Promise<{ width: number, height: number }>((resolve, reject) => {
+                    const dimensions = await new Promise<{ width: number, height: number, duration: number }>((resolve, reject) => {
                         const url = URL.createObjectURL(file);
                         if (fileType === 'video') {
                             const video = document.createElement('video');
                             video.preload = 'metadata';
                             video.onloadedmetadata = () => {
                                 URL.revokeObjectURL(url);
-                                resolve({ width: video.videoWidth, height: video.videoHeight });
+                                resolve({ width: video.videoWidth, height: video.videoHeight, duration: video.duration });
                             };
                             video.onerror = () => reject('Error loading video');
                             video.src = url;
@@ -44,7 +45,7 @@ export default function AddMedia({ fileId }: { fileId: string }) {
                             const img = new window.Image();
                             img.onload = () => {
                                 URL.revokeObjectURL(url);
-                                resolve({ width: img.naturalWidth, height: img.naturalHeight });
+                                resolve({ width: img.naturalWidth, height: img.naturalHeight, duration: 5 }); // Default 5s for images
                             };
                             img.onerror = () => reject('Error loading image');
                             img.src = url;
@@ -52,9 +53,10 @@ export default function AddMedia({ fileId }: { fileId: string }) {
                     });
                     vWidth = dimensions.width;
                     vHeight = dimensions.height;
+                    duration = dimensions.duration;
                 } catch (error) {
-                    console.error("Error getting media dimensions:", error);
-                    // Fallback to default 1920x1080
+                    console.error("Error getting media dimensions and duration:", error);
+                    // Fallback to default 1920x1080 and 30s
                 }
             }
 
@@ -70,10 +72,10 @@ export default function AddMedia({ fileId }: { fileId: string }) {
                 fileName: file.name,
                 fileId: fileId,
                 startTime: 0,
-                endTime: 30,
+                endTime: duration,
                 src: URL.createObjectURL(file),
                 positionStart: lastEnd,
-                positionEnd: lastEnd + 30,
+                positionEnd: lastEnd + duration,
                 includeInMerge: true,
                 x: (pWidth - scaledWidth) / 2,
                 y: (pHeight - scaledHeight) / 2,
