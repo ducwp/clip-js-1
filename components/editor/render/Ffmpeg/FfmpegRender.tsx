@@ -85,8 +85,8 @@ export default function FfmpegRender({
         const audioDelays = [];
 
         // Create base black background with project resolution
-        const resWidth = resolution?.width || 1920;
-        const resHeight = resolution?.height || 1080;
+        const resWidth = resolution?.width || 720;
+        const resHeight = resolution?.height || 1280;
         filters.push(
           `color=c=black:size=${resWidth}x${resHeight}:d=${totalDuration.toFixed(
             3,
@@ -98,16 +98,20 @@ export default function FfmpegRender({
         );
 
         for (let i = 0; i < sortedMediaFiles.length; i++) {
+          console.log("sortedMediaFiles[i]", sortedMediaFiles[i])
           // timing
           const { startTime, positionStart, positionEnd } = sortedMediaFiles[i];
           const duration = positionEnd - positionStart;
 
           // get the file data and write to ffmpeg
           const fileData = await getFile(sortedMediaFiles[i].fileId);
-          const buffer = await fileData.arrayBuffer();
-          const ext =
+          const buffer = await fileData?.arrayBuffer();
+          /* const ext =
             mimeToExt[fileData.type as keyof typeof mimeToExt] ||
-            fileData.type.split("/")[1];
+            fileData.type.split("/")[1] || 'mp4'; */
+
+          const ext = 'mp4'  
+
           await ffmpeg.writeFile(`input${i}.${ext}`, new Uint8Array(buffer));
 
           // TODO: currently we have to write same file if it's used more than once in different clips the below approach is a good start to change this
@@ -261,7 +265,7 @@ export default function FfmpegRender({
         }
 
         // Determine target dimensions based on exportSettings.resolution (treating values as target width)
-        let targetWidth = 1080;
+        let targetWidth = 720;
         switch (exportSettings.resolution) {
           case "480p":
             targetWidth = 480;
@@ -279,7 +283,7 @@ export default function FfmpegRender({
             targetWidth = 3840;
             break;
           default:
-            targetWidth = 1080;
+            targetWidth = 720;
         }
 
         const aspectRatio = resolution.width / resolution.height;

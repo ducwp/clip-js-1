@@ -1,166 +1,16 @@
-import { Player, PlayerRef, RenderCustomControls } from "@remotion/player";
+import { Player, PlayerRef } from "@remotion/player";
 import Composition from "./sequence/composition";
 import { useAppSelector, useAppDispatch } from "@/store";
-import { useRef, useState, useEffect, useCallback, useMemo } from "react";
-import {
-  setIsPlaying,
-  setCurrentTime,
-  setActiveElement,
-} from "@/store/slices/projectSlice";
+import { useRef, useState, useEffect } from "react";
+import { setIsPlaying, setCurrentTime, setActiveElement } from "@/store/slices/projectSlice";
 import { useDispatch } from "react-redux";
-
-//Gemini
-import { Main, MainProps } from "./gemini/Main";
-import type { Item } from "./gemini/item";
 
 //icons
 import { Play, Pause } from "lucide-react";
 
 const fps = 30;
 
-//controls
-import { PlayPauseButton } from "./gemini/controls/PlayPauseButton";
-import { MuteButton } from "./gemini/controls/MuteButton";
-import { VolumeSlider } from "./gemini/controls/VolumeSlider";
-import { LoopButton } from "./gemini/controls/LoopButton";
-import { TimeDisplay } from "./gemini/controls/TimeDisplay";
-import { SeekBar } from "./gemini/controls/SeekBar";
-import { FullscreenButton } from "./gemini/controls/FullscreenButton";
-
-export const PreviewPlayer: React.FC = () => {
-  //const duration = useAppSelector((state) => state.projectState.duration);
-
-  const { aspectRatio } = useAppSelector((state) => state.projectState);
-  const resolution = useAppSelector((state) => state.projectState.resolution);
-
-  console.log("Player.tsx - aspectRatio:", aspectRatio);
-  console.log("Player.tsx - resolution:", resolution);
-
-  const [items, setItems] = useState<Item[]>([
-    {
-      id: 0,
-      left: 20,
-      top: 20,
-      width: 240,
-      height: 240,
-      durationInFrames: 150,
-      from: 0,
-      color: "#ccc",
-      isDragging: false,
-      type: "video",
-      src: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4", // Link video mẫu
-    },
-    {
-      id: 1,
-      left: 40,
-      top: 270,
-      width: 240,
-      height: 240,
-      durationInFrames: 200,
-      from: 0,
-      color: "#666",
-      isDragging: false,
-      type: "image",
-      src: "https://placehold.co/600x400", 
-    },
-  ]);
-  const [selectedItem, setSelectedItem] = useState<number | null>(null);
-
-  // Tìm thông tin chi tiết của item đang được chọn
-  const activeItem = items.find(item => item.id === selectedItem);
-
-  console.log("Player.tsx - activeItem:", activeItem);
-
-  const changeItem = useCallback(
-    (itemId: number, updater: (item: Item) => Item) => {
-      setItems((oldItems) =>
-        oldItems.map((item) => (item.id === itemId ? updater(item) : item)),
-      );
-    },
-    [],
-  );
-
-  const inputProps: MainProps = useMemo(() => {
-    return { items, setSelectedItem, changeItem, selectedItem };
-  }, [changeItem, items, selectedItem]);
-
-  const playerRef = useRef<PlayerRef>(null);
-
-  /* const renderCustomControls: RenderCustomControls = useCallback(() => {
-    return <DownloadButton playerRef={playerRef} />;
-  }, []); */
-
-  const playerWidth = resolution.width || 720;
-  const playerHeight = resolution.height || 1280;
-
-  const [loop, setLoop] = useState(false);
-  return (
-    <>
-      <Player
-        ref={playerRef}
-        style={{ width: "100%", height: "100%" }}
-        component={Main}
-        loop={loop}
-        compositionWidth={playerWidth}
-        compositionHeight={playerHeight}
-        durationInFrames={300}
-        fps={30}
-        inputProps={inputProps}
-        overflowVisible // Giúp hiển thị các viền chọn/nút điều chỉnh khi kéo ra ngoài lề video
-        // renderCustomControls={renderCustomControls}
-        controls={false}
-        acknowledgeRemotionLicense={true} // Bỏ cảnh báo Remotion License
-      />
-      <div className="w-full p-4 bg-gray-500">
-        <SeekBar durationInFrames={300} playerRef={playerRef} />
-      </div>
-      <div className="flex gap-4">
-        <PlayPauseButton playerRef={playerRef} />
-        <TimeDisplay durationInFrames={300} fps={30} playerRef={playerRef} />
-        <MuteButton playerRef={playerRef} />
-        <VolumeSlider playerRef={playerRef} />
-        <LoopButton loop={loop} setLoop={setLoop} />
-        <FullscreenButton playerRef={playerRef} />
-      </div>
-    </>
-  );
-};
-
-/* const DownloadButton: React.FC<{
-  playerRef: React.RefObject<PlayerRef | null>;
-}> = ({ playerRef }) => {
-  const [frame, setFrame] = useState(0);
-
-  useEffect(() => {
-    const { current } = playerRef;
-    if (!current) return;
-
-    const onFrameUpdate = () => {
-      setFrame(current.getCurrentFrame());
-    };
-
-    current.addEventListener("frameupdate", onFrameUpdate);
-    return () => {
-      current.removeEventListener("frameupdate", onFrameUpdate);
-    };
-  }, [playerRef]);
-
-  return (
-    <button
-      type="button"
-      onClick={() => console.log("Download at frame", frame)}
-      style={{
-        background: "transparent",
-        border: "none",
-        color: "white",
-        cursor: "pointer",
-      }}>
-      Download
-    </button>
-  );
-}; */
-
-export const PreviewPlayerx = () => {
+export const PreviewPlayer = () => {
   const duration = useAppSelector((state) => state.projectState.duration);
   const currentTime = useAppSelector((state) => state.projectState.currentTime);
   const isPlaying = useAppSelector((state) => state.projectState.isPlaying);
@@ -250,7 +100,8 @@ export const PreviewPlayerx = () => {
     <>
       <div
         className="flex-1 w-full flex items-center justify-center overflow-hidden my-4"
-        onClick={handleClickOutside}>
+        onClick={handleClickOutside}
+      >
         <Player
           ref={playerRef}
           component={Composition}
@@ -262,7 +113,7 @@ export const PreviewPlayerx = () => {
           compositionWidth={previewWidth}
           compositionHeight={previewHeight}
           fps={fps}
-          style={{ width: "100%", height: "100%" }}
+          style={{ width: "100%", height: "100%"}}
           controls={false}
           clickToPlay={false}
           acknowledgeRemotionLicense={true}

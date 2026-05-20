@@ -20,7 +20,7 @@ const ResizeHandle: React.FC<ResizeHandleProps> = ({ type, onResizeStart }) => {
             width: size,
             backgroundColor: 'white',
             border: `${borderSize}px solid #0B84F3`,
-            borderRadius: '50%',
+            // borderRadius: '50%',
             zIndex: 10,
         };
     }, [borderSize, size]);

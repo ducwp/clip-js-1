@@ -32,8 +32,8 @@ export default function AddMedia({ fileId }: { fileId: string }) {
           : 0;
 
       const fileType = categorizeFile(file.type);
-      let vWidth = 1000;
-      let vHeight = 1000;
+      let vWidth = 1080;
+      let vHeight = 1920;
       let duration = 30; // Default fallback
 
       if (
